@@ -9,7 +9,8 @@ class Auth:
     """ Class for authentication system """
 
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """ Define which routes don't need authentication """
+        """ Define which routes don't need authentication and
+        make some validations to secure the api """
         if path is None or excluded_paths is None or excluded_paths == []:
             return True
 

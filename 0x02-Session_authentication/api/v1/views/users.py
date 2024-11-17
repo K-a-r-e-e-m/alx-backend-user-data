@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" Module of Users views"""
+""" Module of Users views
+"""
 from api.v1.views import app_views
 from flask import abort, jsonify, request
 from models.user import User
@@ -9,7 +10,7 @@ from models.user import User
 def view_all_users() -> str:
     """ GET /api/v1/users
     Return:
-      - list all User objects JSON represented
+      - list of all User objects JSON represented
     """
     all_users = [user.to_json() for user in User.all()]
     return jsonify(all_users)
@@ -24,11 +25,20 @@ def view_one_user(user_id: str = None) -> str:
       - User object JSON represented
       - 404 if the User ID doesn't exist
     """
+
     if user_id is None:
         abort(404)
+
+    if user_id == "me" and request.current_user is None:
+        abort(404)
+
+    if user_id == "me" and request.current_user is not None:
+        return jsonify(request.current_user.to_json())
+
     user = User.get(user_id)
     if user is None:
         abort(404)
+
     return jsonify(user.to_json())
 
 
